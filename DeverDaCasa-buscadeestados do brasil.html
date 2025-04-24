@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dever de Aula - Filtro usando onchange e onkeydown</title>
+    <style>
+        #resultado {
+            margin-top: 10px;
+            font-weight: bold;
+        }
+        ul {
+            list-style: none;
+            padding: 0;
+        }
+        li {
+            cursor: pointer;
+            padding: 5px;
+            border: 1px solid #ddd;
+            margin-top: 2px;
+        }
+        li:hover {
+            background-color: #f0f0f0;
+        }
+    </style>
+</head>
+
+<body>
+    <h2>Filtro usando onchange e onkeydown</h2>
+    <!--   
+1) O usuário deve ao selecionar uma opção no select com estados do Brasil,
+ ele deve mostrar abaixo no html o resultado selecionado.
+
+2) Fazer um filtro de buscar estados conforme o que o usuário digitar no input. 
+Estilo: site do correios ou da americanas ao buscar produto.
+-->
+    <label for="estados">Escolha um estado:</label>
+    <select id="estados" onchange="mostrarEstado()">
+        <option value="">Selecione um estado</option>
+    </select>
+
+    <p id="resultado"></p>
+
+    <h3>Buscar Estado</h3>
+    <input type="text" id="busca" placeholder="Digite para buscar..." onkeydown="filtrarEstados()">
+    <ul id="lista-estados"></ul>
+
+    <script>
+      let estadosBrasil = [
+            "Acre", "Alagoas", "Amapá", "Amazonas", "Bahia", "Ceará", "Distrito Federal", "Espírito Santo",
+            "Goiás", "Maranhão", "Mato Grosso", "Mato Grosso do Sul", "Minas Gerais","Manaus", "Pará", "Paraíba", "Paraná",
+            "Pernambuco", "Piauí", "Rio de Janeiro", "Rio Grande do Norte", "Rio Grande do Sul", "Rondônia", "Roraima",
+            "Santa Catarina", "São Paulo", "Sergipe", "Tocantins"
+        ];
+
+        function popularSelect() {
+            var options = "<option value=''>Selecione um estado</option>";
+            for (var i = 0; i < estadosBrasil.length; i++) {
+                options += "<option value='" + estadosBrasil[i] + "'>" + estadosBrasil[i] + "</option>";
+            }
+            document.getElementById("estados").innerHTML = options;
+        }
+
+        function mostrarEstado() {
+            var select = document.getElementById("estados");
+            var resultado = document.getElementById("resultado");
+            resultado.textContent = select.value ? "Estado selecionado: " + select.value : "";
+        }
+
+        function filtrarEstados() {
+            var busca = document.getElementById("busca").value.toLowerCase();
+            var listaHTML = "";
+            for (var i = 0; i < estadosBrasil.length; i++) {
+                if (estadosBrasil[i].toLowerCase().indexOf(busca) !== -1) {
+                    listaHTML += "<li onclick=\"selecionarEstado('" + estadosBrasil[i] + "')\">" + estadosBrasil[i] + "</li>";
+                }
+            }
+            document.getElementById("lista-estados").innerHTML = listaHTML;
+        }
+
+        function selecionarEstado(estado) {
+            document.getElementById("busca").value = estado;
+            document.getElementById("lista-estados").innerHTML = "";
+        }
+
+        window.onload = popularSelect;
+      
+    </script>
+</body>
+
+</html>
