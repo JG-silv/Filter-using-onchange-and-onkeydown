@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Filter using onchange and onkeydown</title>
+    <style>
+        #result {
+            margin-top: 10px;
+            font-weight: bold;
+        }
+
+        ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        li {
+            cursor: pointer;
+            padding: 5px;
+            border: 1px solid #ddd;
+            margin-top: 2px;
+        }
+
+        li:hover {
+            background-color: #f0f0f0;
+        }
+    </style>
+</head>
+
+<body>
+    <h2>Filter using onchange and onkeydown</h2>
+    <!--   
+    1) When the user selects an option in the dropdown with Brazilian states,
+       it should display the selected result below in the HTML.
+
+    2) Create a filter to search for states as the user types into the input.
+       Like in Correios or Americanas search bars.
+    -->
+    <label for="states">Choose a state:</label>
+    <select id="states" onchange="showState()">
+        <option value="">Select a state</option>
+    </select>
+
+    <p id="result"></p>
+
+    <h3>Search for a State</h3>
+    <input type="text" id="search" placeholder="Type to search..." onkeydown="filterStates()">
+    <ul id="state-list"></ul>
+
+    <script>
+        let brazilStates = [
+            "Acre", "Alagoas", "Amapá", "Amazonas", "Bahia", "Ceará", "Distrito Federal", "Espírito Santo",
+            "Goiás", "Maranhão", "Mato Grosso", "Mato Grosso do Sul", "Minas Gerais", "Manaus", "Pará", "Paraíba", "Paraná",
+            "Pernambuco", "Piauí", "Rio de Janeiro", "Rio Grande do Norte", "Rio Grande do Sul", "Rondônia", "Roraima",
+            "Santa Catarina", "São Paulo", "Sergipe", "Tocantins"
+        ];
+
+        function populateSelect() {
+            let options = "<option value=''>Select a state</option>";
+            for (let i = 0; i < brazilStates.length; i++) {
+                options += "<option value='" + brazilStates[i] + "'>" + brazilStates[i] + "</option>";
+            }
+            document.getElementById("states").innerHTML = options;
+        }
+
+        function showState() {
+            let select = document.getElementById("states");
+            let result = document.getElementById("result");
+            result.textContent = select.value ? "Selected state: " + select.value : "";
+        }
+
+        function filterStates() {
+            let search = document.getElementById("search").value.toLowerCase();
+            let listHTML = "";
+            for (let i = 0; i < brazilStates.length; i++) {
+                if (brazilStates[i].toLowerCase().includes(search)) {
+                    listHTML += "<li onclick=\"selectState('" + brazilStates[i] + "')\">" + brazilStates[i] + "</li>";
+                }
+            }
+            document.getElementById("state-list").innerHTML = listHTML;
+        }
+
+        function selectState(state) {
+            document.getElementById("search").value = state;
+            document.getElementById("state-list").innerHTML = "";
+        }
+
+        window.onload = populateSelect;
+    </script>
+</body>
+
+</html>
